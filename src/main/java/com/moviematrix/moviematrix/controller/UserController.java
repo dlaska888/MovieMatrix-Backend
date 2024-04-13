@@ -1,4 +1,4 @@
-package com.moviematrix.moviematrix.controller.userController;
+package com.moviematrix.moviematrix.controller;
 
 import com.moviematrix.moviematrix.dto.ChangePasswordRequest;
 import com.moviematrix.moviematrix.entity.User;

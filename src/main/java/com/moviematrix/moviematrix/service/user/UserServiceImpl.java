@@ -1,5 +1,6 @@
 package com.moviematrix.moviematrix.service.user;
 
+import com.moviematrix.moviematrix.dto.ChangePasswordRequest;
 import com.moviematrix.moviematrix.entity.User;
 import com.moviematrix.moviematrix.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

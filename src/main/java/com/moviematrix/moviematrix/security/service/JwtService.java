@@ -1,4 +1,4 @@
-package com.moviematrix.moviematrix.service;
+package com.moviematrix.moviematrix.security.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

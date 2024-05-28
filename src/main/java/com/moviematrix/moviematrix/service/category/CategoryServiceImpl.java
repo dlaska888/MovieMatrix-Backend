@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,5 +42,13 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public void deleteById(Long id) {
 
+    }
+
+    @Override
+    public List<Category> addCategories(List<Long> categoryIds, User user) {
+        List<Category> categories = categoryIds.stream()
+                .map(categoryId -> new Category(null, user, categoryId))
+                .collect(Collectors.toList());
+        return repository.saveAll(categories);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,4 +43,13 @@ public class MoviePreferenceServiceImpl implements MoviePreferenceService{
     public void deleteById(Long id) {
 
     }
+
+    @Override
+    public List<MoviePreference> addMoviePreferences(List<Long> movieIds, User user) {
+        List<MoviePreference> moviePreferences = movieIds.stream()
+                .map(movieId -> new MoviePreference(null, user, movieId))
+                .collect(Collectors.toList());
+        return repository.saveAll(moviePreferences);
+    }
+
 }

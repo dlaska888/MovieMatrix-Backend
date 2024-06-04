@@ -1,12 +1,16 @@
 package com.moviematrix.moviematrix.service.seenMovie;
 
 import com.moviematrix.moviematrix.entity.SeenMovie;
+import com.moviematrix.moviematrix.entity.User;
 import com.moviematrix.moviematrix.repository.SeenMovieRepository;
+import com.moviematrix.moviematrix.repository.UserRepository;
+import com.moviematrix.moviematrix.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -14,6 +18,7 @@ import java.util.Optional;
 public class SeenMovieServiceImpl implements SeenMovieService{
 
     private final SeenMovieRepository repository;
+    private final UserRepository userRepository;
     @Override
     public List<SeenMovie> findAll() {
         return repository.findAll();
@@ -41,5 +46,13 @@ public class SeenMovieServiceImpl implements SeenMovieService{
     @Override
     public void deleteById(Long id) {
 
+    }
+
+    @Override
+    public List<SeenMovie> addSeenMovies(List<Long> movieIds, User user) {
+        List<SeenMovie> seenMovies = movieIds.stream()
+                .map(movieId -> new SeenMovie(null, user, movieId))
+                .collect(Collectors.toList());
+        return repository.saveAll(seenMovies);
     }
 }

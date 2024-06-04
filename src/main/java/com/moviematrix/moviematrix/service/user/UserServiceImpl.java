@@ -1,6 +1,7 @@
 package com.moviematrix.moviematrix.service.user;
 
 import com.moviematrix.moviematrix.dto.ChangePasswordRequest;
+import com.moviematrix.moviematrix.dto.RegisterRequest;
 import com.moviematrix.moviematrix.entity.User;
 import com.moviematrix.moviematrix.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -59,11 +60,20 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User save(User user) {
-        return null;
+        return repository.save(user);
     }
 
     @Override
     public void deleteById(Long id) {
 
+    }
+
+    @Override
+    public User updateUser(RegisterRequest userDto) {
+        User user = repository.findByEmail(userDto.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(userDto.getPassword());
+        return repository.save(user);
     }
 }

@@ -12,6 +12,8 @@ public interface UserService {
     public void changePassword(ChangePasswordRequest request, Principal connectedUser);
     List<User> findAll();
     User findById(Long id);
+    User findByUsername(String username);
+    User findByEmail(String email);
 
     User save(User user);
     void deleteById(Long id);

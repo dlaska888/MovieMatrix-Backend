@@ -1,14 +1,18 @@
 package com.moviematrix.moviematrix.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "user_seen_movies")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,6 +24,7 @@ public class SeenMovie {
 
     @JoinColumn(name = "user_id")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnore
     private User user;
 
     @Column(name = "movie_id")

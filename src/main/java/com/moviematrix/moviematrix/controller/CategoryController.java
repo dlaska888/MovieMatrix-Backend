@@ -11,8 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -24,8 +26,9 @@ public class CategoryController {
     private final JwtService jwtService;
     private final UserRepository userRepository;
     @GetMapping
-    public List<Category> getAllCategories(){
-        return service.findAll();
+    public List<Category> getAllCategories(Principal connectedUser){
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        return service.findAllByUser(user);
     }
 
     @GetMapping("/{categoryId}")
@@ -43,7 +46,7 @@ public class CategoryController {
         String userEmail = jwtService.extractUsername(token);
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        List<Category> categories = service.addCategories(categoryIds, user);
+        List<Category> categories = service.addOrUpdateCategories(categoryIds, user);
         return ResponseEntity.ok(categories);
     }
 }

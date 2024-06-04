@@ -17,11 +17,17 @@ import java.util.List;
 public class UserController {
     private final UserServiceImpl service;
 
-    @PatchMapping
+    @GetMapping("/me")
+    public ResponseEntity<User> getCurrentUser(Principal connectedUser) {
+        String username = connectedUser.getName();
+        User currentUser = service.findByEmail(username);
+        return ResponseEntity.ok(currentUser);
+    }
+
+    @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(
             @RequestBody ChangePasswordRequest request,
-            Principal connectedUser
-    ) {
+            Principal connectedUser) {
         service.changePassword(request, connectedUser);
         return ResponseEntity.ok().build();
     }
@@ -36,9 +42,8 @@ public class UserController {
         return service.findById(userId);
     }
 
-
     @PutMapping()
-    public ResponseEntity<User> updateUser( @RequestBody RegisterRequest userDto) {
+    public ResponseEntity<User> updateUser(@RequestBody RegisterRequest userDto) {
         User updatedUser = service.updateUser(userDto);
         return ResponseEntity.ok(updatedUser);
     }

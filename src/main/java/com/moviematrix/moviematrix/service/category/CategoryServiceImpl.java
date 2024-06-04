@@ -3,6 +3,8 @@ package com.moviematrix.moviematrix.service.category;
 import com.moviematrix.moviematrix.entity.Category;
 import com.moviematrix.moviematrix.entity.User;
 import com.moviematrix.moviematrix.repository.CategoryRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,11 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public List<Category> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public List<Category> findAllByUser(User user) {
+        return repository.findAllByUser(user);
     }
 
     @Override
@@ -45,7 +52,10 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public List<Category> addCategories(List<Long> categoryIds, User user) {
+    @Transactional
+    public List<Category> addOrUpdateCategories(List<Long> categoryIds, User user) {
+        repository.deleteAllByUser(user);
+
         List<Category> categories = categoryIds.stream()
                 .map(categoryId -> new Category(null, user, categoryId))
                 .collect(Collectors.toList());

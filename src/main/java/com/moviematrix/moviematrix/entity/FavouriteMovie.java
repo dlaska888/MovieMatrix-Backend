@@ -5,19 +5,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "user_categories")
+@Table(name = "user_favourite_movies")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category {
+public class FavouriteMovie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +27,7 @@ public class Category {
     @JsonIgnore
     private User user;
 
-    @Column(name = "category_id")
-    private Long categoryId;
+    @Column(name = "movie_id")
+    private Long movieId;
 
 }

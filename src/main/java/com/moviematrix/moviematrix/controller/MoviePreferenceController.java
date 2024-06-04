@@ -10,8 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -25,8 +27,9 @@ public class MoviePreferenceController {
 
 
     @GetMapping
-    public List<MoviePreference> getAllMoviePreferences(){
-        return service.findAll();
+    public List<MoviePreference> getAllMoviePreferences(Principal connectedUser){
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        return service.findAllByUser(user);
     }
 
     @GetMapping("/{moviePreferenceId}")
@@ -44,7 +47,7 @@ public class MoviePreferenceController {
         String userEmail = jwtService.extractUsername(token);
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        List<MoviePreference> moviePreferences = service.addMoviePreferences(movieIds, user);
+        List<MoviePreference> moviePreferences = service.addOrUpdateMoviePreferences(movieIds, user);
         return ResponseEntity.ok(moviePreferences);
     }
 }

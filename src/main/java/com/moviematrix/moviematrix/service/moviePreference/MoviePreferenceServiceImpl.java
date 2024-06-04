@@ -3,6 +3,8 @@ package com.moviematrix.moviematrix.service.moviePreference;
 import com.moviematrix.moviematrix.entity.MoviePreference;
 import com.moviematrix.moviematrix.entity.User;
 import com.moviematrix.moviematrix.repository.MoviePreferenceRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,11 @@ public class MoviePreferenceServiceImpl implements MoviePreferenceService{
     @Override
     public List<MoviePreference> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public List<MoviePreference> findAllByUser(User user) {
+        return repository.findAllByUser(user);
     }
 
     @Override
@@ -45,7 +52,10 @@ public class MoviePreferenceServiceImpl implements MoviePreferenceService{
     }
 
     @Override
-    public List<MoviePreference> addMoviePreferences(List<Long> movieIds, User user) {
+    @Transactional
+    public List<MoviePreference> addOrUpdateMoviePreferences(List<Long> movieIds, User user) {
+        repository.deleteAllByUser(user);
+
         List<MoviePreference> moviePreferences = movieIds.stream()
                 .map(movieId -> new MoviePreference(null, user, movieId))
                 .collect(Collectors.toList());
